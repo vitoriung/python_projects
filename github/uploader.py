@@ -22,9 +22,9 @@ reponame = args.reponame
 filepath = args.filepath
 destination = args.destination
 
+# function check whether repository exist already
 def repo ():
     url = urljoin(GITHUB_API, 'user/repos')
-    print url
     payload = {}
     res = requests.get(
         url,
@@ -34,6 +34,7 @@ def repo ():
         )
     j = json.loads(res.text)
     REPOEXIST = ''
+    print 'List of current repositories:'
     for i in range(0,len(j)):
       print (j[i]["name"])
       if (j[i]["name"]) == reponame:    
@@ -43,9 +44,9 @@ def repo ():
     else:
       repocreate()
       filecommit()
-    
+
+# function create repository    
 def repocreate ():
-  print 'will create repo'
   url = urljoin(GITHUB_API, 'user/repos')
   payload = { "name": reponame }
   res = requests.post(
@@ -56,15 +57,13 @@ def repocreate ():
         data = json.dumps(payload),
         )
 
+#function commit the file
 def filecommit ():
-  print 'will commit ' + filepath + ' to the ' + reponame
-  
-  print 'will check whether the file exist'
+  print 'commiting ' + filepath + ' to the ' + reponame + ' repository'
   url=urljoin(GITHUB_API, 'repos/' + owner + '/' + reponame + '/contents/' + destination )
   res = requests.get(url,)
   with open(filepath) as f:
     encoded = base64.b64encode(f.read())
-    #print(encoded)
   if res.status_code == 200:
     print 'file already exist at the destination'
     filesha = json.loads(res.text)['sha']
