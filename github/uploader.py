@@ -1,4 +1,4 @@
-GITHUB_API = 'https://api.github.com'
+#!/usr/bin/python
 
 import argparse
 import requests
@@ -16,6 +16,7 @@ parser.add_argument("-d", "--destination", help="location at the destination rep
 args = parser.parse_args()
 
 # set variables
+GITHUB_API = 'https://api.github.com'
 owner = args.owner
 API_TOKEN = args.token
 reponame = args.reponame
